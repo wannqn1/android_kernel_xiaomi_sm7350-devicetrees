@@ -1,0 +1,12 @@
+/dts-v1/;
+/plugin/;
+
+#include "renoir-sm7350.dtsi"
+
+/ {
+	model = "Xiaomi Mi 11 Lite 5G (renoir)";
+	compatible = "xiaomi,renoir", "qcom,shima-idp", "qcom,shima", "qcom,idp";
+	qcom,msm-id = <450 0x10000>;
+	qcom,board-id = <34 0>;
+	xiaomi,board-id = <6 0>;
+};
