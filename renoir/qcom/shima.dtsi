@@ -3846,6 +3846,7 @@
 };
 
 #include "shima-pinctrl.dtsi"
+#include "shima-dcvs.dtsi"
 #include "shima-pm.dtsi"
 #include "shima-regulators.dtsi"
 #include "shima-qupv3.dtsi"
