@@ -551,6 +551,8 @@
 		reg = <0x17c10000 0x1000>;
 		reg-names = "wdt-base";
 		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+		/* Arm only after reset and suspend testing on Renoir. */
+		status = "disabled";
 	};
 
 	arch_timer: timer {
