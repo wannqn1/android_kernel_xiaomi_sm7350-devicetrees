@@ -1,4 +1,20 @@
-# redwood devicetrees for Linux 6.18
+# Linux 6.18 device trees for renoir
+
+The Xiaomi Mi 11 Lite 5G (`renoir`, SM7350 Shima) uses
+`renoir/qcom/shima.dts` for its base DTB and
+`renoir/qcom/renoir-sm7350-overlay.dts` for its board overlay.
+
+| Repository | Contents |
+| --- | --- |
+| [Kernel](https://github.com/wannqn1/android_kernel_xiaomi_sm7350/tree/renoir-6.18) | Linux 6.18 source and build scripts |
+| [External modules](https://github.com/wannqn1/android_kernel_xiaomi_sm7350-modules/tree/renoir-6.18) | Qualcomm vendor modules |
+| [Kernel prebuilts](https://github.com/wannqn1/android_device_xiaomi_renoir-kernel-6.18/tree/renoir-6.18) | Kernel image, DTB, DTBO and modules for Android builds |
+| [Renoir Android device tree](https://github.com/wannqn1/android_device_xiaomi_renoir/tree/renoir-6.18) | LineageOS 24.0 product and repository manifest |
+| [Xiaomi SM8350 common tree](https://github.com/wannqn1/android_device_xiaomi_sm8350-common/tree/renoir-6.18) | Shared LineageOS configuration |
+
+Follow the [renoir kernel build instructions](https://github.com/wannqn1/android_kernel_xiaomi_sm7350/blob/renoir-6.18/renoir/README.md) to build the DTB and DTBO with the matching kernel and modules.
+
+## Redwood upstream reference
 
 The devicetrees for the **Redmi Note 12 Pro 5G / POCO X5 Pro 5G** (`redwood`,
 SM7325 "yupik") on Linux 6.18. This repo also tracks the status of the 6.18 port.
@@ -11,18 +27,7 @@ fingerprint, haptics, IR, NFC, Wi-Fi, Bluetooth, IPA, video, FastRPC, crypto,
 thermal and the two M20 panel variants (dynamic refresh at 120, 110, 100, 90 and
 60 Hz).
 
-## Repositories
-
-| Repository | Contents |
-|---|---|
-| [redwood-6.18-kernel](https://github.com/suvojeet-sengupta/redwood-6.18-kernel) | The kernel: ACK `android17-6.18` + `-lts` (6.18.39) with Qualcomm's lahaina/yupik platform |
-| [redwood-6.18-modules](https://github.com/suvojeet-sengupta/redwood-6.18-modules) | Vendor and redwood modules, build and bring-up scripts |
-| **redwood-6.18-devicetrees** (this one) | dtb, dtbo and the status below |
-| [device_xiaomi_redwood-kernel-6.18](https://github.com/suvojeet-sengupta/device_xiaomi_redwood-kernel-6.18) | Ready-made Image, modules, dtb and dtbo for ROM builds |
-| [device_xiaomi_redwood](https://github.com/suvojeet-sengupta/device_xiaomi_redwood/tree/seventeen) | Android device tree, PixelOS 17 (`seventeen`, manifest in `seventeen-setup`) |
-| [device_xiaomi_redwood_clo](https://github.com/suvojeet-sengupta/device_xiaomi_redwood_clo/tree/6.18) | Android device tree, AOSPA (`6.18`, manifest in `6.18-setup`) |
-
-## Building
+### Building for redwood
 
 The dtb and dtbo are preprocessed with Clang and compiled with the kernel's
 `dtc`, so build the kernel first. Then run:
@@ -36,14 +41,14 @@ python3 mkdtboimg.py create dtbo.img $R/out-dt/redwood-overlay.dtbo
 The output is `$R/out-dt/yupik.dtb` and `redwood-overlay.dtbo`.
 `mkdtboimg.py` is AOSP's, from `system/libufdt/utils/src`.
 
-## Status
+### Redwood hardware status
 
 Last updated 2026-11-15, on 6.18.39 with PixelOS 17 as the daily system and
 KernelSU root.
 
 Legend: ✅ works · 🟡 partly working or not proven end to end · ⛔ broken or kept off · ⬜ not started
 
-### Kernel and core
+#### Kernel and core
 
 | Item | State | Notes |
 |---|---|---|
@@ -61,7 +66,7 @@ Legend: ✅ works · 🟡 partly working or not proven end to end · ⛔ broken 
 | CoreSight | ⛔ | `coresight-funnel` resets the SoC, so it's kept out |
 | `tz_log` | ⛔ | Probing it resets the phone (same on 6.12), so it isn't bundled |
 
-### Peripherals
+#### Peripherals
 
 | Item | State | Notes |
 |---|---|---|
@@ -85,14 +90,14 @@ Legend: ✅ works · 🟡 partly working or not proven end to end · ⛔ broken 
 | Crypto, qseecom, smcinvoke | ✅ | Keymaster and Gatekeeper work |
 | NFC | 🟡 | `nxp-nci` loads. Untested: the test unit is an India model without an NFC chip |
 
-### Android
+#### Android
 
 | Item | State | Notes |
 |---|---|---|
 | PixelOS 17 | ✅ | Daily system, built from the prebuilt and `device_xiaomi_redwood` (`seventeen`) |
 | AOSPA | ✅ | Built from `device_xiaomi_redwood_clo` (`6.18`) |
 
-## Bugs fixed along the way
+### Bugs fixed along the way
 
 | Symptom | Cause | Fix |
 |---|---|---|
@@ -112,14 +117,14 @@ Legend: ✅ works · 🟡 partly working or not proven end to end · ⛔ broken 
 | Reset during module load | `coresight-funnel`, `tz_log_dlkm` | Kept out |
 | Panic | `qcom_lpm` governor | Kept out, TEO instead |
 
-## Next
+### Next
 
 1. 240 fps slow motion
 2. Speaker VI feedback
 3. A proper arm-smmu deferred TLB invalidation, instead of a strict flush
 4. CoreSight, the watchdog and the `qcom_lpm` panic
 
-## Testing safely
+### Testing safely
 
 **Gatekeeper lives in the TEE, and both slots share it.** On an empty /data,
 gatekeeperd finds no `/data/misc/gatekeeper/.coldboot` and wipes every
